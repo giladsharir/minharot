@@ -30,16 +30,17 @@ def list_images(directory):
         I = Image.open(os.path.join(directory, label, f))
       except:
         f1 = os.path.join(directory, label, f)
-        f2=f1[1:]
+        #f2= os.path.join(directory, label, f[1:])
 
         print("unrecognized image: {}".format(f1))
-        print("new image {}".format(f2))
-        call["mv {} {}".format(f1,f2)]
+        #print("new image {}".format(f2))
+        call(["rm","-f",f1])
 
   filenames, labels = zip(*files_and_labels)
   filenames = list(filenames)
   labels = list(labels)
   unique_labels = list(set(labels))
+  print(unique_labels)
 
   label_to_int = {}
   for i, label in enumerate(unique_labels):
