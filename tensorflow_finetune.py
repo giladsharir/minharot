@@ -56,6 +56,7 @@ from PIL import Image
 import tensorflow as tf
 import tensorflow.contrib.slim as slim
 import tensorflow.contrib.slim.nets
+import numpy as np
 
 
 parser = argparse.ArgumentParser()
@@ -338,9 +339,11 @@ def main(args):
                     _ = sess.run(fc8_train_op, {is_training: True})
                 except tf.errors.OutOfRangeError:
                     break
-            confidence = tf.max(logits, 1)
-            conf = sess.run(confidence, {is_training: False})
-            print(conf)
+
+            logits = sess.run(logits, {is_training: False})
+            confidence = np.max(logits, 1)
+            print(confidence)
+
             # Check accuracy on the train and val sets every epoch.
             train_acc = check_accuracy(sess, correct_prediction, is_training, train_init_op)
             #val_acc = check_accuracy(sess, correct_prediction, is_training, val_init_op)
