@@ -340,8 +340,8 @@ def main(args):
                 except tf.errors.OutOfRangeError:
                     break
 
-            logits = sess.run(logits, {is_training: False})
-            confidence = np.max(logits, 1)
+            logi = sess.run(logits, {is_training: False})
+            confidence = np.max(logi, 1)
             print(confidence)
 
             # Check accuracy on the train and val sets every epoch.
