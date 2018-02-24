@@ -340,8 +340,8 @@ def main(args):
                 except tf.errors.OutOfRangeError:
                     break
 
-            # sess.run(val_init_op)
-            # logi = sess.run(logits, {is_training: False})
+            sess.run(val_init_op)
+            logi = sess.run(logits, {is_training: False})
             # confidence = np.max(logi, 1)
             # print(confidence)
 
