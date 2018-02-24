@@ -345,6 +345,7 @@ def main(args):
 
             sess.run(val_init_op)
             conf = sess.run(probabilities, {is_training: False})
+            conf = np.max(np.asarray(conf), axis=1)
             # confidence = np.max(logi, 1)
             print(conf)
 
