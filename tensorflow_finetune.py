@@ -282,6 +282,7 @@ def main(args):
             logits, _ = vgg.vgg_16(images, num_classes=num_classes, is_training=is_training,
                                    dropout_keep_prob=args.dropout_keep_prob)
 
+
         # Specify where the model checkpoint is (pretrained weights).
         model_path = args.model_path
         assert(os.path.isfile(model_path))
@@ -313,6 +314,8 @@ def main(args):
         full_train_op = full_optimizer.minimize(loss)
 
         # Evaluation metrics
+        probabilities = tf.nn.softmax(logits)
+
         prediction = tf.to_int32(tf.argmax(logits, 1))
         correct_prediction = tf.equal(prediction, labels)
         accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
@@ -341,9 +344,9 @@ def main(args):
                     break
 
             sess.run(val_init_op)
-            logi = sess.run(logits, {is_training: False})
+            conf = sess.run(probabilities, {is_training: False})
             # confidence = np.max(logi, 1)
-            print(logi)
+            print(conf)
 
             # Check accuracy on the train and val sets every epoch.
             train_acc = check_accuracy(sess, correct_prediction, is_training, train_init_op)
