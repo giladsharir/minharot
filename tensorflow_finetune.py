@@ -338,7 +338,9 @@ def main(args):
                     _ = sess.run(fc8_train_op, {is_training: True})
                 except tf.errors.OutOfRangeError:
                     break
-
+            confidence = tf.max(logits, 1)
+            conf = sess.run(confidence, {is_training: False})
+            print(conf)
             # Check accuracy on the train and val sets every epoch.
             train_acc = check_accuracy(sess, correct_prediction, is_training, train_init_op)
             #val_acc = check_accuracy(sess, correct_prediction, is_training, val_init_op)
