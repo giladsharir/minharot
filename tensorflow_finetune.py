@@ -343,11 +343,6 @@ def main(args):
                 except tf.errors.OutOfRangeError:
                     break
 
-            sess.run(val_init_op)
-            conf = sess.run(probabilities, {is_training: False})
-            conf = np.max(np.asarray(conf), axis=1)
-            # confidence = np.max(logi, 1)
-            print(conf)
 
             # Check accuracy on the train and val sets every epoch.
             train_acc = check_accuracy(sess, correct_prediction, is_training, train_init_op)
@@ -379,15 +374,24 @@ def main(args):
             print('Train accuracy: %f' % train_acc)
             #print('Val accuracy: %f\n' % val_acc)
 
+
+        # sess.run(val_init_op)
+        # conf = sess.run(probabilities, {is_training: False})
+        # conf = np.max(np.asarray(conf), axis=1)
+        # confidence = np.max(logi, 1)
+        # print(conf)
+
         # print to file
         results = "results.txt"
         sess.run(val_init_op)
         while True:
             try:
-                pred, files = sess.run([prediction, filenames], {is_training: False})
+                pred, conf, files = sess.run([prediction, probabilities, filenames], {is_training: False})
+                conf = np.max(np.asarray(conf), axis=1)
+
                 with open(results, "a") as r:
-                    for f, p in zip(files, pred):
-                        r.write("{} {}\n".format(f, p))
+                    for f, p, cf in zip(files, pred, conf):
+                        r.write("{} {} {}\n".format(f, p, cf))
             except:
                 break
 
